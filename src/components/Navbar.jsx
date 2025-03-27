@@ -34,17 +34,16 @@ const Navbar = () => {
     return (
         <div className="navbar bg-base-100 shadow-lg">
             <div className="navbar-start">
-                <div className="dropdown lg:hidden">
-                    <label tabIndex={0} className="btn btn-ghost btn-circle" onClick={() => setIsOpen(!isOpen)}>
-                        {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+                <div className="dropdown">
+                    <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                        <FaBars className="h-5 w-5" />
                     </label>
-                    <ul tabIndex={0} className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 ${isOpen ? 'block' : 'hidden'}`}>
+                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         {menuItems.map((item) => (
                             <li key={item.path}>
                                 <Link
                                     to={item.path}
                                     className={isActive(item.path) ? 'active' : ''}
-                                    onClick={() => setIsOpen(false)}
                                 >
                                     {item.label}
                                 </Link>
