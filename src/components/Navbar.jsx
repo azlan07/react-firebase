@@ -26,8 +26,8 @@ const Navbar = () => {
         { path: '/', label: 'Home' },
         { path: '/about', label: 'About' },
         ...(currentUser && userRole === 'admin' ? [
-            { path: '/blog', label: 'Blog' },
-            { path: '/events', label: 'Events' }
+            { path: '/blog', label: 'Blog Management' },
+            { path: '/events', label: 'Event Management' }
         ] : []),
     ];
 
@@ -85,8 +85,8 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <div className="hidden lg:flex gap-2">
-                        <Link to="/login" className="btn btn-ghost">Login</Link>
-                        <Link to="/register" className="btn btn-primary">Register</Link>
+                        <Link to="/auth/login" className="btn btn-ghost">Login</Link>
+                        <Link to="/auth/register" className="btn btn-primary">Register</Link>
                     </div>
                 )}
             </div>

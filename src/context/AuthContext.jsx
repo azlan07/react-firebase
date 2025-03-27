@@ -3,7 +3,9 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup 
 } from 'firebase/auth';
 import { auth, database } from '../firebase/config';
 import { ref, set, get } from 'firebase/database';
@@ -55,6 +57,34 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function loginWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Check if user exists in database
+      const userRef = ref(database, `users/${user.uid}`);
+      const snapshot = await get(userRef);
+      
+      if (!snapshot.exists()) {
+        // If new user, create entry with default role
+        await set(userRef, {
+          email: user.email,
+          role: 'user',
+          createdAt: new Date().toISOString()
+        });
+        setUserRole('user');
+      } else {
+        setUserRole(snapshot.val().role);
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   function logout() {
     return signOut(auth);
   }
@@ -84,6 +114,7 @@ export function AuthProvider({ children }) {
     userRole,
     signup,
     login,
+    loginWithGoogle,
     logout
   };
 
@@ -92,4 +123,4 @@ export function AuthProvider({ children }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-} 
+}

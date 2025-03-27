@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,6 +20,19 @@ const Login = () => {
       navigate('/blog');
     } catch (error) {
       setError('Failed to sign in. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await loginWithGoogle();
+      navigate('/blog');
+    } catch (error) {
+      setError('Failed to sign in with Google.');
     } finally {
       setLoading(false);
     }
@@ -78,6 +92,18 @@ const Login = () => {
               )}
             </button>
           </form>
+
+          <div className="divider">OR</div>
+
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn btn-outline w-full"
+            disabled={loading}
+          >
+            <FcGoogle className="w-5 h-5 mr-2" />
+            Sign in with Google
+          </button>
+
           <div className="text-center mt-4">
             <p>Don't have an account? <Link to="/register" className="text-primary">Register</Link></p>
           </div>
@@ -87,4 +113,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;
