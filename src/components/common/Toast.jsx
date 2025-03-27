@@ -17,7 +17,7 @@ const Toast = ({ message, type = 'success', onClose }) => {
   }[type];
 
   return (
-    <div className="toast toast-top toast-end">
+    <div className="toast toast-end">
       <div className={`alert ${alertClass}`}>
         <span>{message}</span>
       </div>
