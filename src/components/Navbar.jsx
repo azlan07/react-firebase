@@ -49,10 +49,23 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         ))}
-                        {currentUser && (
+                        {currentUser ? (
                             <li>
                                 <button onClick={handleLogout}>Logout</button>
                             </li>
+                        ) : (
+                            <>
+                                <li>
+                                    <Link to="/auth/login" className={isActive('/auth/login') ? 'active' : ''}>
+                                        Login
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/auth/register" className={isActive('/auth/register') ? 'active' : ''}>
+                                        Register
+                                    </Link>
+                                </li>
+                            </>
                         )}
                     </ul>
                 </div>

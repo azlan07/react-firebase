@@ -41,20 +41,27 @@ const Home = () => {
   useEffect(() => {
     const eventsRef = ref(database, 'events');
     
-    const unsubscribe = onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const eventsArray = Object.entries(data).map(([id, event]) => ({
-          id,
-          ...event
-        }));
-        setEvents(eventsArray);
-      } else {
+    return onValue(eventsRef, (snapshot) => {
+      setLoading(true);
+      try {
+        const data = snapshot.val();
+        if (data) {
+          // Convert to array and sort by date (newest first)
+          const eventsArray = Object.entries(data)
+            .map(([id, event]) => ({ id, ...event }))
+            .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+          setEvents(eventsArray);
+        } else {
+          setEvents([]);
+        }
+      } catch (error) {
+        console.error('Error loading events:', error);
         setEvents([]);
+      } finally {
+        setLoading(false);
       }
     });
-
-    return () => unsubscribe();
   }, []);
 
   // Calculate pagination
@@ -252,4 +259,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;
